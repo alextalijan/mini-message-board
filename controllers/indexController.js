@@ -18,6 +18,11 @@ module.exports = {
       messages,
     });
   },
+  getMessage: (req, res) => {
+    res.render('message', {
+      ...messages[Number(req.params.messageIndex)],
+    });
+  },
   getForm: (req, res) => {
     res.render('form');
   },

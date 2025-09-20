@@ -9,6 +9,7 @@ router.use((req, res, next) => {
 
 router.get('/new', controller.getForm);
 router.post('/new', controller.postForm);
+router.get('/:messageIndex', controller.getMessage);
 router.get('/', controller.get);
 
 module.exports = router;

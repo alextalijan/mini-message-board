@@ -1,26 +1,17 @@
-const messages = [
-  {
-    text: 'Hi there!',
-    user: 'Amando',
-    added: new Date(),
-  },
-  {
-    text: 'Hello World!',
-    user: 'Charles',
-    added: new Date(),
-  },
-];
+const db = require('../db/queries');
 
 module.exports = {
-  get: (req, res) => {
+  get: async (req, res) => {
     res.render('index', {
       title: res.locals.title,
-      messages,
+      messages: await db.getAllMessages(),
     });
   },
-  getMessage: (req, res) => {
+  getMessage: async (req, res) => {
+    const message = await db.getMessageById(req.params.messageIndex);
+
     res.render('message', {
-      ...messages[Number(req.params.messageIndex)],
+      ...message,
     });
   },
   getForm: (req, res) => {

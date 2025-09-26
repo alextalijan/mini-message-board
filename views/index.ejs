@@ -7,10 +7,10 @@
     <p>Click on the link to <a href="/new">add a new message</a>.</p>
     <% messages.forEach(message => { %>
       <div>
-        <span><%= message.user %></span>
-        <p><%= message.text %></p>
-        <span><%= message.added %></span>
-        <a href=<%= messages.indexOf(message) %>>Open</a>
+        <span><%= message.username %></span>
+        <p><%= message.message %></p>
+        <span><%= message.date %></span>
+        <a href=<%= message.id %>>Open</a>
       </div>
     <% }) %>
   </body>

@@ -4,14 +4,15 @@
   </head>
   <body>
     <h1>New Message</h1>
+    <%- include('./partials/errors.ejs') %>
     <form method="POST" action="/new">
       <label>
         Author's Name:
-        <input type="text" name="name" />
+        <input type="text" name="name" value="<%= locals.name %>" />
       </label>
       <label>
         Message:
-        <input type="text" name="message" />
+        <input type="text" name="message" value="<%= locals.message %>" />
       </label>
       <button type="submit">Submit Message</button>
     </form>

@@ -1,38 +1,53 @@
-const messages = [
-  {
-    text: 'Hi there!',
-    user: 'Amando',
-    added: new Date(),
-  },
-  {
-    text: 'Hello World!',
-    user: 'Charles',
-    added: new Date(),
-  },
+const db = require('../db/queries');
+const { body, validationResult } = require('express-validator');
+
+validations = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Username cannot be empty.')
+    .isLength({ min: 3 })
+    .withMessage('Username cannot be shorter than 3 characters.')
+    .isLength({ max: 20 })
+    .withMessage('Username cannot be longer than 20 characters.'),
+  body('message')
+    .trim()
+    .notEmpty()
+    .withMessage('Message cannot be empty.')
+    .isLength({ max: 100 })
+    .withMessage('Message cannot be longer than 100 characters.'),
 ];
 
 module.exports = {
-  get: (req, res) => {
+  get: async (req, res) => {
     res.render('index', {
       title: res.locals.title,
-      messages,
+      messages: await db.getAllMessages(),
     });
   },
-  getMessage: (req, res) => {
+  getMessage: async (req, res) => {
+    const message = await db.getMessageById(req.params.messageIndex);
+
     res.render('message', {
-      ...messages[Number(req.params.messageIndex)],
+      ...message,
     });
   },
   getForm: (req, res) => {
     res.render('form');
   },
-  postForm: (req, res) => {
-    messages.push({
-      text: req.body.message,
-      user: req.body.name,
-      added: new Date(),
-    });
+  postForm: [
+    validations,
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.locals.errors = errors.array();
+        res.locals.name = req.body.name;
+        res.locals.message = req.body.message;
+        return res.render('form');
+      }
 
-    res.redirect('/');
-  },
+      await db.addMessage(req.body.name, req.body.message);
+      res.redirect('/');
+    },
+  ],
 };

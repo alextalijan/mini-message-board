@@ -41,6 +41,8 @@ module.exports = {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.locals.errors = errors.array();
+        res.locals.name = req.body.name;
+        res.locals.message = req.body.message;
         return res.render('form');
       }
 
